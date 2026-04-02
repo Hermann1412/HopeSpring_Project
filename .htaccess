@@ -1,0 +1,20 @@
+DirectoryIndex index.php
+
+# Block direct access to sensitive files
+<FilesMatch "^\.env$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+RewriteEngine On
+# Change to / when deployed to InfinityFree root (htdocs folder)
+RewriteBase /
+
+# Serve existing files/directories directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Support extensionless routes by mapping to existing .php files
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([A-Za-z0-9_-]+)/?$ $1.php [L,QSA]
